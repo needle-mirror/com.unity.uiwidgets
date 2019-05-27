@@ -3,7 +3,6 @@
     "references": [
         "Unity.InternalAPIEngineBridge.024"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

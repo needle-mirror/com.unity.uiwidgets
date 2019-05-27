@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.0.6-preview] - 2019-05-27
+
+Update yamato.
+
+## [1.0.5-preview] - 2019-05-27
+
+Update yamato.
+
+## [1.0.4-preview] - 2019-05-27
+
+Update yamato.
+
+## [1.0.3-preview] - 2019-05-24
+
+Fix issues:
+
+* Errors on Unity 2019.2.0+
+* Documentation issues.
+
+Add LICENSE.md.
+
+Complete QAReport.
+
 ## [1.0.2-preview] - 2019-05-21
 
 Fix issues:

@@ -1,3 +1,4 @@
+#if !UNITY_2019_2_OR_NEWER
 using Unity.UIWidgets.material;
 using Unity.UIWidgets.painting;
 using Unity.UIWidgets.ui;
@@ -70,3 +71,4 @@ namespace UIWidgetsSample {
         }
     }
 }
+#endif

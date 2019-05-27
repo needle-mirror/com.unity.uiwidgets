@@ -28,8 +28,11 @@ namespace Unity.UIWidgets.Sample.Redux.ObjectFinder {
                 builder: (context, viewModel, dispatcher) => new ObjectFinderAppWidget(
                     model: viewModel, 
                     doSearch: (text) => dispatcher.dispatch(SearchAction.create(text)),
-                    onSelect: (id) => dispatcher.dispatch(new SelectObjectAction() {id = id}),
+                    onSelect: (id) => dispatcher.dispatch(new SelectObjectAction() {id = id})
+#if !UNITY_2019_2_OR_NEWER
+                    ,
                     title: this.gameObject.name
+#endif
                 ),
                 converter: (state) => new ObjectFinderAppWidgetModel() {
                     objects = state.objects,

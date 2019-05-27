@@ -1,8 +1,11 @@
 using Unity.UIWidgets.engine;
 using UnityEditor;
+#if !UNITY_2019_2_OR_NEWER
 using UnityEditor.UI;
+#endif
 
 namespace Unity.UIWidgets.Editor {
+#if !UNITY_2019_2_OR_NEWER
     [CustomEditor(typeof(UIWidgetsPanel), true)]
     [CanEditMultipleObjects]
     public class UIWidgetsPanelEditor : RawImageEditor {
@@ -15,4 +18,5 @@ namespace Unity.UIWidgets.Editor {
             this.serializedObject.ApplyModifiedProperties();
         }
     }
+#endif
 }

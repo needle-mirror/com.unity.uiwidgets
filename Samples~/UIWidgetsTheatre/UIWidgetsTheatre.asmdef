@@ -1,9 +1,15 @@
-﻿{
-	"name": "UIWidgetsTheatre",
-	"references": [
-			"Unity.UIWidgets",
-			"UIWidgetsGallery",
-			"UIWidgetsSample"],
-	"includePlatforms": [],
-	"excludePlatforms": []
+{
+    "name": "UIWidgetsTheatre",
+    "references": [
+        "Unity.UIWidgets",
+        "UIWidgetsGallery",
+        "UIWidgetsSample"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
 }

@@ -7,6 +7,7 @@ using Unity.UIWidgets.widgets;
 using UnityEngine;
 using UnityEngine.Networking;
 
+#if !UNITY_2019_2_OR_NEWER
 public class HttpRequestSample : UIWidgetsPanel
 {
     protected override Widget createWidget() {
@@ -18,6 +19,7 @@ public class HttpRequestSample : UIWidgetsPanel
         );
     }
 }
+#endif
 
 public class AsyncRequestWidget : StatefulWidget {
     

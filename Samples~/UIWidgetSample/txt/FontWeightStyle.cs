@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if !UNITY_2019_2_OR_NEWER
+using System.Collections.Generic;
 using Unity.UIWidgets.material;
 using Unity.UIWidgets.ui;
 using Unity.UIWidgets.widgets;
@@ -84,3 +85,4 @@ namespace UIWidgetsSample {
         }
     }
 }
+#endif
