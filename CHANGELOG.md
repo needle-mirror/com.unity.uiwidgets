@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.4-preview.1] - 2019-8-28
+
+Fix issues:
+
+* Emoji size
+* Resupport antialias
+* Fix raster cache assert
+* Some bugs in editable
+* Some bugs in AutomaticKeepAlive
+
+New features:
+
+* Picker in Cupertino
+
 ## [1.5.4-preview.0] - 2019-8-28
 
 Aligned to flutter 1.5.4.
