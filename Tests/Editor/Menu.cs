@@ -2,44 +2,46 @@
 
 namespace UIWidgets.Tests {
     public static class Menu {
-        [MenuItem("Window/UIWidgets/Tests/CanvasAndLayers")]
+        [MenuItem("UIWidgetsTests/CanvasAndLayers")]
         public static void canvasAndLayers() {
             EditorWindow.GetWindow(typeof(CanvasAndLayers));
         }
 
-        [MenuItem("Window/UIWidgets/Tests/RenderBoxes")]
+        [MenuItem("UIWidgetsTests/RenderBoxes")]
         public static void renderBoxes() {
             EditorWindow.GetWindow(typeof(RenderBoxes));
         }
 
-        [MenuItem("Window/UIWidgets/Tests/RenderParagraph")]
+        [MenuItem("UIWidgetsTests/RenderParagraph")]
         public static void renderRenderParagraph() {
             EditorWindow.GetWindow(typeof(Paragraph));
         }
 
-        [MenuItem("Window/UIWidgets/Tests/Gestures")]
+        [MenuItem("UIWidgetsTests/Gestures")]
         public static void gestures() {
             EditorWindow.GetWindow(typeof(Gestures));
         }
 
-        [MenuItem("Window/UIWidgets/Tests/RenderEditable")]
+        [MenuItem("UIWidgetsTests/RenderEditable")]
         public static void renderEditable() {
             EditorWindow.GetWindow(typeof(RenderEditable));
         }
 
-        [MenuItem("Window/UIWidgets/Tests/Widgets")]
+        [MenuItem("UIWidgetsTests/Widgets")]
         public static void renderWidgets() {
             EditorWindow.GetWindow(typeof(Widgets));
         }
 
-        [MenuItem("Window/UIWidgets/Tests/Show SceneViewTests")]
+        //These samples are not available after Unity2019.1
+        /*
+        [MenuItem("UIWidgetsTests/Show SceneViewTests")]
         public static void showSceneView() {
             SceneViewTests.show();
         }
 
-        [MenuItem("Window/UIWidgets/Tests/Hide SceneViewTests")]
+        [MenuItem("UIWidgetsTests/Hide SceneViewTests")]
         public static void hideSceneView() {
             SceneViewTests.hide();
-        }
+        }*/
     }
 }

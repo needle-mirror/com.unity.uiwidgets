@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.UIWidgets.painting;
 
 namespace Unity.UIWidgets.ui {
     public enum FontStyle {
@@ -72,18 +73,30 @@ namespace Unity.UIWidgets.ui {
     }
 
     class TextStyle : IEquatable<TextStyle> {
-        public readonly Color color = Color.fromARGB(255, 0, 0, 0);
-        public readonly float fontSize = 14.0f;
-        public readonly FontWeight fontWeight = FontWeight.w400;
-        public readonly FontStyle fontStyle = FontStyle.normal;
-        public readonly float letterSpacing = 0.0f;
-        public readonly float wordSpacing = 0.0f;
-        public readonly TextBaseline textBaseline = TextBaseline.alphabetic;
-        public readonly float height = 1.0f;
-        public readonly TextDecoration decoration = TextDecoration.none;
+        public static readonly Color kDefaultColor = Color.fromARGB(255, 0, 0, 0);
+        public const float kDefaultFontSize = 14.0f;
+        public static readonly FontWeight kDefaultFontWeight = FontWeight.w400;
+        public const FontStyle kDefaultfontStyle = FontStyle.normal;
+        public const float kDefaultLetterSpacing = 0.0f;
+        public const float kDefaultWordSpacing = 0.0f;
+        public const TextBaseline kDefaultTextBaseline = TextBaseline.alphabetic;
+        public const float kDefaultHeight = 1.0f;
+        public static readonly TextDecoration kDefaultDecoration = TextDecoration.none;
+        public const TextDecorationStyle kDefaultDecorationStyle = TextDecorationStyle.solid;
+        public const string kDefaultFontFamily = "Helvetica";
+
+        public readonly Color color = kDefaultColor;
+        public readonly float fontSize = kDefaultFontSize;
+        public readonly FontWeight fontWeight = kDefaultFontWeight;
+        public readonly FontStyle fontStyle = kDefaultfontStyle;
+        public readonly float letterSpacing = kDefaultLetterSpacing;
+        public readonly float wordSpacing = kDefaultWordSpacing;
+        public readonly TextBaseline textBaseline = kDefaultTextBaseline;
+        public readonly float height = kDefaultHeight;
+        public readonly TextDecoration decoration = kDefaultDecoration;
         public readonly Color decorationColor;
-        public readonly TextDecorationStyle decorationStyle = TextDecorationStyle.solid;
-        public readonly string fontFamily = "Helvetica";
+        public readonly TextDecorationStyle decorationStyle = kDefaultDecorationStyle;
+        public readonly string fontFamily = kDefaultFontFamily;
         public readonly Paint background;
 
         internal UnityEngine.Color UnityColor {
@@ -241,8 +254,9 @@ namespace Unity.UIWidgets.ui {
             int? maxLines = null,
             float? fontSize = null,
             string fontFamily = null,
-            float? lineHeight = null, // todo  
-            string ellipsis = null) {
+            float? height = null, // todo  
+            string ellipsis = null,
+            StrutStyle strutStyle = null) {
             this.textAlign = textAlign;
             this.textDirection = textDirection;
             this.fontWeight = fontWeight;
@@ -250,8 +264,9 @@ namespace Unity.UIWidgets.ui {
             this.maxLines = maxLines;
             this.fontSize = fontSize;
             this.fontFamily = fontFamily;
-            this.lineHeight = lineHeight;
+            this.height = height;
             this.ellipsis = ellipsis;
+            this.strutStyle = strutStyle;
         }
 
         public bool Equals(ParagraphStyle other) {
@@ -266,7 +281,7 @@ namespace Unity.UIWidgets.ui {
             return this.textAlign == other.textAlign && this.textDirection == other.textDirection &&
                    this.fontWeight == other.fontWeight && this.fontStyle == other.fontStyle &&
                    this.maxLines == other.maxLines && this.fontSize.Equals(other.fontSize) &&
-                   string.Equals(this.fontFamily, other.fontFamily) && this.lineHeight.Equals(other.lineHeight) &&
+                   string.Equals(this.fontFamily, other.fontFamily) && this.height.Equals(other.height) &&
                    string.Equals(this.ellipsis, other.ellipsis);
         }
 
@@ -303,7 +318,7 @@ namespace Unity.UIWidgets.ui {
                 hashCode = (hashCode * 397) ^ this.maxLines.GetHashCode();
                 hashCode = (hashCode * 397) ^ this.fontSize.GetHashCode();
                 hashCode = (hashCode * 397) ^ (this.fontFamily != null ? this.fontFamily.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ this.lineHeight.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.height.GetHashCode();
                 hashCode = (hashCode * 397) ^ (this.ellipsis != null ? this.ellipsis.GetHashCode() : 0);
                 return hashCode;
             }
@@ -315,7 +330,7 @@ namespace Unity.UIWidgets.ui {
                 fontStyle: this.fontStyle,
                 fontFamily: this.fontFamily,
                 fontSize: this.fontSize,
-                height: this.lineHeight
+                height: this.height
             );
         }
 
@@ -330,8 +345,9 @@ namespace Unity.UIWidgets.ui {
         public readonly int? maxLines;
         public readonly float? fontSize;
         public readonly string fontFamily;
-        public readonly float? lineHeight;
+        public readonly float? height;
         public readonly string ellipsis;
+        public readonly StrutStyle strutStyle;
 
         public bool ellipsized() {
             return !string.IsNullOrEmpty(this.ellipsis);
@@ -421,22 +437,17 @@ namespace Unity.UIWidgets.ui {
 
         public readonly int index;
 
-        public static readonly FontWeight w100 = new FontWeight(0);
-        public static readonly FontWeight w200 = new FontWeight(1);
-        public static readonly FontWeight w300 = new FontWeight(2);
-        public static readonly FontWeight w400 = new FontWeight(3);
-        public static readonly FontWeight w500 = new FontWeight(4);
-        public static readonly FontWeight w600 = new FontWeight(5);
-
-        public static readonly FontWeight w700 = new FontWeight(6);
-
-        public static readonly FontWeight w800 = new FontWeight(7);
-
-        public static readonly FontWeight w900 = new FontWeight(8);
-
-
+        public static readonly FontWeight w100 = new FontWeight(0); // Ultralight
+        public static readonly FontWeight w200 = new FontWeight(1); // Thin
+        public static readonly FontWeight w300 = new FontWeight(2); // Light
+        public static readonly FontWeight w400 = new FontWeight(3); // Regular
+        public static readonly FontWeight w500 = new FontWeight(4); // Medium
+        public static readonly FontWeight w600 = new FontWeight(5); // Semibold
+        public static readonly FontWeight w700 = new FontWeight(6); // Bold
+        public static readonly FontWeight w800 = new FontWeight(7); // Heavy
+        public static readonly FontWeight w900 = new FontWeight(8); // Black
+        
         public static readonly FontWeight normal = w400;
-
 
         public static readonly FontWeight bold = w700;
 
@@ -562,7 +573,7 @@ namespace Unity.UIWidgets.ui {
         }
     }
 
-    public class TextBox : IEquatable<TextBox> {
+    public struct TextBox : IEquatable<TextBox> {
         public readonly float left;
 
         public readonly float top;
@@ -598,14 +609,6 @@ namespace Unity.UIWidgets.ui {
         }
 
         public bool Equals(TextBox other) {
-            if (ReferenceEquals(null, other)) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
             return this.left.Equals(other.left) && this.top.Equals(other.top) && this.right.Equals(other.right) &&
                    this.bottom.Equals(other.bottom) && this.direction == other.direction;
         }
@@ -613,10 +616,6 @@ namespace Unity.UIWidgets.ui {
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) {
                 return false;
-            }
-
-            if (ReferenceEquals(this, obj)) {
-                return true;
             }
 
             if (obj.GetType() != this.GetType()) {

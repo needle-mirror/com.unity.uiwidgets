@@ -8,6 +8,10 @@ using Object = UnityEngine.Object;
 namespace Unity.UIWidgets.foundation {
     public delegate void ValueChanged<T>(T value);
 
+    public delegate void ValueSetter<T>(T value);
+
+    public delegate T ValueGetter<T>();
+
     public delegate IEnumerable<T> EnumerableFilter<T>(IEnumerable<T> input);
 
     public static class ObjectUtils {
@@ -69,6 +73,15 @@ namespace Unity.UIWidgets.foundation {
 
         public static TValue getOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> it, TKey key) {
             TValue v;
+            it.TryGetValue(key, out v);
+            return v;
+        }
+        
+        public static TValue getOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> it, TKey key, TValue defaultVal) {
+            TValue v = defaultVal;
+            if (key == null) {
+                return v;
+            }
             it.TryGetValue(key, out v);
             return v;
         }
@@ -145,6 +158,15 @@ namespace Unity.UIWidgets.foundation {
         
         public static T[] array<T>(this List<T> list) {
             return NoAllocHelpersBridge<T>.ExtractArrayFromListT(list);
+        }
+
+        public static List<T> CreateRepeatedList<T>(T value, int length) {
+            List<T> newList = new List<T>(length);
+            for (int i = 0; i < length; i++) {
+                newList.Add(value);
+            }
+
+            return newList;
         }
     }
 }

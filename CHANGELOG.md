@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.5.4-preview.0] - 2019-8-28
+
+Aligned to flutter 1.5.4.
+
+## [1.0.7-preview] - 2019-08-22
+
+Optimization:
+
+* Rendering process
+* Text layout
+* Self-implemented antialiasing replaces MSAA
+
+New features:
+
+* Drag and drop
+
+Fix issues:
+
+* Shadow performance issue
+* Image filter mode issue
+
 ## [1.0.6-preview] - 2019-05-27
 
 Update yamato.

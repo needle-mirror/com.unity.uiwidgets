@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.UIWidgets.foundation;
 using Unity.UIWidgets.gestures;
 using Unity.UIWidgets.painting;
@@ -363,7 +362,7 @@ namespace Unity.UIWidgets.rendering {
             throw new Exception("Unknown axis: " + this.direction);
         }
 
-        protected override float computeMaxIntrinsicHeight(float width) {
+        protected internal override float computeMaxIntrinsicHeight(float width) {
             switch (this.direction) {
                 case Axis.horizontal:
                     return this._computeIntrinsicHeightForWidth(width);

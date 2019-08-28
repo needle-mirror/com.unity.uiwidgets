@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UIWidgets.Runtime.rendering;
 using Unity.UIWidgets.foundation;
 using Unity.UIWidgets.gestures;
@@ -1781,7 +1780,8 @@ namespace Unity.UIWidgets.widgets {
             float textScaleFactor = 1.0f,
             int? maxLines = null,
             Action onSelectionChanged = null,
-            Color selectionColor = null
+            Color selectionColor = null,
+            StrutStyle strutStyle = null
         ) : base(key: key) {
             D.assert(text != null);
             D.assert(maxLines == null || maxLines > 0);
@@ -1794,6 +1794,7 @@ namespace Unity.UIWidgets.widgets {
             this.maxLines = maxLines;
             this.onSelectionChanged = onSelectionChanged;
             this.selectionColor = selectionColor;
+            this.strutStyle = strutStyle;
         }
 
         public readonly TextSpan text;
@@ -1804,6 +1805,7 @@ namespace Unity.UIWidgets.widgets {
         public readonly int? maxLines;
         public readonly Action onSelectionChanged;
         public readonly Color selectionColor;
+        public readonly StrutStyle strutStyle;
 
         public override RenderObject createRenderObject(BuildContext context) {
             return new RenderParagraph(
@@ -1828,6 +1830,7 @@ namespace Unity.UIWidgets.widgets {
             renderObject.maxLines = this.maxLines;
             renderObject.onSelectionChanged = this.onSelectionChanged;
             renderObject.selectionColor = this.selectionColor;
+            renderObject.strutStyle = this.strutStyle;
         }
 
         public override void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -1856,7 +1859,7 @@ namespace Unity.UIWidgets.widgets {
             ImageRepeat repeat = ImageRepeat.noRepeat,
             Rect centerSlice = null,
             bool invertColors = false,
-            FilterMode filterMode = FilterMode.Point
+            FilterMode filterMode = FilterMode.Bilinear
         ) : base(key) {
             this.image = image;
             this.width = width;
@@ -1974,7 +1977,12 @@ namespace Unity.UIWidgets.widgets {
             PointerHoverEventListener onPointerHover = null,
             PointerUpEventListener onPointerUp = null,
             PointerCancelEventListener onPointerCancel = null,
+            PointerSignalEventListener onPointerSignal = null,
             PointerScrollEventListener onPointerScroll = null,
+            PointerDragFromEditorEnterEventListener onPointerDragFromEditorEnter = null,
+            PointerDragFromEditorHoverEventListener onPointerDragFromEditorHover = null,
+            PointerDragFromEditorExitEventListener onPointerDragFromEditorExit = null,
+            PointerDragFromEditorReleaseEventListener onPointerDragFromEditorRelease = null,
             HitTestBehavior behavior = HitTestBehavior.deferToChild,
             Widget child = null
         ) : base(key: key, child: child) {
@@ -1982,11 +1990,17 @@ namespace Unity.UIWidgets.widgets {
             this.onPointerMove = onPointerMove;
             this.onPointerUp = onPointerUp;
             this.onPointerCancel = onPointerCancel;
+            this.onPointerSignal = onPointerSignal;
             this.onPointerHover = onPointerHover;
             this.onPointerExit = onPointerExit;
             this.onPointerEnter = onPointerEnter;
             this.onPointerScroll = onPointerScroll;
             this.behavior = behavior;
+
+            this.onPointerDragFromEditorEnter = onPointerDragFromEditorEnter;
+            this.onPointerDragFromEditorHover = onPointerDragFromEditorHover;
+            this.onPointerDragFromEditorExit = onPointerDragFromEditorExit;
+            this.onPointerDragFromEditorRelease = onPointerDragFromEditorRelease;
         }
 
         public readonly PointerDownEventListener onPointerDown;
@@ -1996,6 +2010,8 @@ namespace Unity.UIWidgets.widgets {
         public readonly PointerUpEventListener onPointerUp;
 
         public readonly PointerCancelEventListener onPointerCancel;
+
+        public readonly PointerSignalEventListener onPointerSignal;
 
         public readonly PointerHoverEventListener onPointerHover;
 
@@ -2007,16 +2023,29 @@ namespace Unity.UIWidgets.widgets {
 
         public readonly HitTestBehavior behavior;
 
+        public readonly PointerDragFromEditorEnterEventListener onPointerDragFromEditorEnter;
+        
+        public readonly PointerDragFromEditorHoverEventListener onPointerDragFromEditorHover;
+        
+        public readonly PointerDragFromEditorExitEventListener onPointerDragFromEditorExit;
+        
+        public readonly PointerDragFromEditorReleaseEventListener onPointerDragFromEditorRelease;
+
         public override RenderObject createRenderObject(BuildContext context) {
             return new RenderPointerListener(
                 onPointerDown: this.onPointerDown,
                 onPointerMove: this.onPointerMove,
                 onPointerUp: this.onPointerUp,
                 onPointerCancel: this.onPointerCancel,
+                onPointerSignal: this.onPointerSignal,
                 onPointerEnter: this.onPointerEnter,
                 onPointerExit: this.onPointerExit,
                 onPointerHover: this.onPointerHover,
                 onPointerScroll: this.onPointerScroll,
+                onPointerDragFromEditorEnter: this.onPointerDragFromEditorEnter,
+                onPointerDragFromEditorHover: this.onPointerDragFromEditorHover,
+                onPointerDragFromEditorExit: this.onPointerDragFromEditorExit,
+                onPointerDragFromEditorRelease: this.onPointerDragFromEditorRelease,
                 behavior: this.behavior
             );
         }
@@ -2027,11 +2056,19 @@ namespace Unity.UIWidgets.widgets {
             renderObject.onPointerMove = this.onPointerMove;
             renderObject.onPointerUp = this.onPointerUp;
             renderObject.onPointerCancel = this.onPointerCancel;
+            renderObject.onPointerSignal = this.onPointerSignal;
             renderObject.onPointerEnter = this.onPointerEnter;
             renderObject.onPointerHover = this.onPointerHover;
             renderObject.onPointerExit = this.onPointerExit;
             renderObject.onPointerScroll = this.onPointerScroll;
             renderObject.behavior = this.behavior;
+
+#if UNITY_EDITOR
+            renderObject.onPointerDragFromEditorEnter = this.onPointerDragFromEditorEnter;
+            renderObject.onPointerDragFromEditorHover = this.onPointerDragFromEditorHover;
+            renderObject.onPointerDragFromEditorExit = this.onPointerDragFromEditorExit;
+            renderObject.onPointerDragFromEditorRelease = this.onPointerDragFromEditorRelease;
+#endif
         }
 
         public override void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -2053,6 +2090,10 @@ namespace Unity.UIWidgets.widgets {
                 listeners.Add("cancel");
             }
 
+            if (this.onPointerSignal != null) {
+                listeners.Add("signal");
+            }
+
             if (this.onPointerEnter != null) {
                 listeners.Add("enter");
             }
@@ -2068,6 +2109,24 @@ namespace Unity.UIWidgets.widgets {
             if (this.onPointerScroll != null) {
                 listeners.Add("scroll");
             }
+
+#if UNITY_EDITOR
+            if (this.onPointerDragFromEditorEnter != null) {
+                listeners.Add("dragFromEditorEnter");
+            }
+
+            if (this.onPointerDragFromEditorHover != null) {
+                listeners.Add("dragFromEditorHover");
+            }
+
+            if (this.onPointerDragFromEditorExit != null) {
+                listeners.Add("dragFromEditorExit");
+            }
+
+            if (this.onPointerDragFromEditorRelease != null) {
+                listeners.Add("dragFromEditorRelease");
+            }
+#endif
 
             properties.add(new EnumerableProperty<string>("listeners", listeners, ifEmpty: "<none>"));
             properties.add(new EnumProperty<HitTestBehavior>("behavior", this.behavior));
@@ -2085,7 +2144,7 @@ namespace Unity.UIWidgets.widgets {
         }
 
         public static List<RepaintBoundary> wrapAll(List<Widget> widgets) {
-            List<RepaintBoundary> result = Enumerable.Repeat((RepaintBoundary) null, widgets.Count).ToList();
+            List<RepaintBoundary> result = CollectionUtils.CreateRepeatedList<RepaintBoundary>(null, widgets.Count);
             for (int i = 0; i < result.Count; ++i) {
                 result[i] = wrap(widgets[i], i);
             }

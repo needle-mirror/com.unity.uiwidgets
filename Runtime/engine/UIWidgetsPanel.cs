@@ -6,11 +6,9 @@ using Unity.UIWidgets.foundation;
 using Unity.UIWidgets.ui;
 using Unity.UIWidgets.widgets;
 using UnityEngine;
-#if !UNITY_2019_2_OR_NEWER
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using RawImage = UnityEngine.UI.RawImage;
-#endif
 using Rect = UnityEngine.Rect;
 using Texture = UnityEngine.Texture;
 
@@ -26,12 +24,8 @@ namespace Unity.UIWidgets.engine {
         }
 
         protected override bool hasFocus() {
-#if !UNITY_2019_2_OR_NEWER
             return EventSystem.current != null &&
                    EventSystem.current.currentSelectedGameObject == this._uiWidgetsPanel.gameObject;
-#else
-            return false;
-#endif
         }
 
         public override void scheduleFrame(bool regenerateLayerTree = true) {
@@ -65,38 +59,30 @@ namespace Unity.UIWidgets.engine {
         }
 
         public override GUIContent titleContent {
-            get {
-#if !UNITY_2019_2_OR_NEWER
-                return new GUIContent(this._uiWidgetsPanel.gameObject.name);
-#else
-                return null;
-#endif
-            }
+            get { return new GUIContent(this._uiWidgetsPanel.gameObject.name); }
         }
 
         protected override float queryDevicePixelRatio() {
             return this._uiWidgetsPanel.devicePixelRatio;
         }
-        
-        protected override int queryAntiAliasing() {
-            return this._uiWidgetsPanel.antiAliasing;
-        }
 
         protected override Vector2 queryWindowSize() {
-#if !UNITY_2019_2_OR_NEWER
             var rect = this._uiWidgetsPanel.rectTransform.rect;
-            var size = new Vector2(rect.width, rect.height) *
-                       this._uiWidgetsPanel.canvas.scaleFactor / this._uiWidgetsPanel.devicePixelRatio;
-            size.x = Mathf.Round(size.x);
-            size.y = Mathf.Round(size.y);
-            return size;
-#else
-            return Vector2.zero;
-#endif
+            // Here we use ReferenceEquals instead of "==" due to
+            // https://blogs.unity3d.com/2014/05/16/custom-operator-should-we-keep-it/
+            // In short, "==" is overloaded for UnityEngine.Object and will bring performance issues
+            if (!ReferenceEquals(this._uiWidgetsPanel.canvas, null)) {
+                var size = new Vector2(rect.width, rect.height) *
+                           this._uiWidgetsPanel.canvas.scaleFactor / this._uiWidgetsPanel.devicePixelRatio;
+                size.x = Mathf.Round(size.x);
+                size.y = Mathf.Round(size.y);
+                return size;
+            }
+
+            return new Vector2(0, 0);
         }
 
         public Offset windowPosToScreenPos(Offset windowPos) {
-#if !UNITY_2019_2_OR_NEWER
             Camera camera = null;
             var canvas = this._uiWidgetsPanel.canvas;
             if (canvas.renderMode != RenderMode.ScreenSpaceCamera) {
@@ -112,23 +98,15 @@ namespace Unity.UIWidgets.engine {
             var worldPos = rectTransform.TransformPoint(new Vector2(pos.x, pos.y));
             var screenPos = RectTransformUtility.WorldToScreenPoint(camera, worldPos);
             return new Offset(screenPos.x, Screen.height - screenPos.y);
-#else
-            return null;
-#endif
         }
     }
 
     [RequireComponent(typeof(RectTransform))]
-#if !UNITY_2019_2_OR_NEWER
     public class UIWidgetsPanel : RawImage, IPointerDownHandler, IPointerUpHandler, IDragHandler,
         IPointerEnterHandler, IPointerExitHandler, WindowHost {
-#else
-    public class UIWidgetsPanel : RawImage, WindowHost {
-#endif
         static Event _repaintEvent;
 
         [SerializeField] protected float devicePixelRatioOverride;
-        [SerializeField] protected int antiAliasingOverride = Window.defaultAntiAliasing;
         WindowAdapter _windowAdapter;
         Texture _texture;
         Vector2 _lastMouseMove;
@@ -147,22 +125,18 @@ namespace Unity.UIWidgets.engine {
 
         void _handleViewMetricsChanged(string method, List<JSONNode> args) {
             this._windowAdapter.onViewMetricsChanged();
-            this._displayMetrics.Update();
+            this._displayMetrics.onViewMetricsChanged();
         }
 
-#if UNITY_2019_2_OR_NEWER
-        protected virtual void OnEnable() {
-#else
         protected override void OnEnable() {
             base.OnEnable();
-#endif
 
             //Disable the default touch -> mouse event conversion on mobile devices
             Input.simulateMouseWithTouches = false;
 
             this._displayMetrics = DisplayMetricsProvider.provider();
             this._displayMetrics.OnEnable();
-            
+
             this._enteredPointers.Clear();
 
             if (_repaintEvent == null) {
@@ -190,12 +164,6 @@ namespace Unity.UIWidgets.engine {
                     : this._displayMetrics.devicePixelRatio;
             }
         }
-        
-        public int antiAliasing {
-            get {
-                return this.antiAliasingOverride >= 0 ? this.antiAliasingOverride : QualitySettings.antiAliasing;
-            }
-        }
 
         public WindowPadding viewPadding {
             get { return this._displayMetrics.viewPadding; }
@@ -205,23 +173,17 @@ namespace Unity.UIWidgets.engine {
             get { return this._displayMetrics.viewInsets; }
         }
 
-#if UNITY_2019_2_OR_NEWER
-        protected virtual void OnDisable() {	
-#else
-        protected override void OnDisable() {	
-#endif
-            D.assert(this._windowAdapter != null);	
-            this._windowAdapter.OnDisable();	
-            this._windowAdapter = null;	
-#if !UNITY_2019_2_OR_NEWER
-            base.OnDisable();	
-#endif
+        protected override void OnDisable() {
+            D.assert(this._windowAdapter != null);
+            this._windowAdapter.OnDisable();
+            this._windowAdapter = null;
+            base.OnDisable();
         }
-        
+
         protected virtual Widget createWidget() {
             return null;
         }
-        
+
         public void recreateWidget() {
             Widget root;
             using (this._windowAdapter.getScope()) {
@@ -232,21 +194,17 @@ namespace Unity.UIWidgets.engine {
         }
 
         internal void applyRenderTexture(Rect screenRect, Texture texture, Material mat) {
-#if !UNITY_2019_2_OR_NEWER
             this.texture = texture;
             this.material = mat;
-#endif
         }
 
         protected virtual void Update() {
             this._displayMetrics.Update();
             UIWidgetsMessageManager.ensureUIWidgetsMessageManagerIfNeeded();
-            
+
 #if UNITY_ANDROID
             if (Input.GetKeyDown(KeyCode.Escape)) {
-                this._windowAdapter.withBinding(() => {
-                    WidgetsBinding.instance.handlePopRoute();
-                });
+                this._windowAdapter.withBinding(() => { WidgetsBinding.instance.handlePopRoute(); });
             }
 #endif
 
@@ -294,7 +252,6 @@ namespace Unity.UIWidgets.engine {
 
         void handleMouseScroll() {
             if (Input.mouseScrollDelta.y != 0 || Input.mouseScrollDelta.x != 0) {
-#if !UNITY_2019_2_OR_NEWER
                 var scaleFactor = this.canvas.scaleFactor;
                 var pos = this.getPointPosition(Input.mousePosition);
                 this._windowAdapter.onScroll(Input.mouseScrollDelta.x * scaleFactor,
@@ -302,7 +259,6 @@ namespace Unity.UIWidgets.engine {
                     pos.x,
                     pos.y,
                     InputUtils.getScrollButtonKey());
-#endif
             }
         }
 
@@ -315,10 +271,10 @@ namespace Unity.UIWidgets.engine {
                     break;
                 }
             }
+
             return InputUtils.getMouseButtonKey(defaultKey);
         }
 
-#if !UNITY_2019_2_OR_NEWER
         public void OnPointerDown(PointerEventData eventData) {
             EventSystem.current.SetSelectedGameObject(this.gameObject, eventData);
             var position = this.getPointPosition(eventData);
@@ -331,9 +287,7 @@ namespace Unity.UIWidgets.engine {
                 physicalY: position.y
             ));
         }
-#endif
 
-#if !UNITY_2019_2_OR_NEWER
         public void OnPointerUp(PointerEventData eventData) {
             var position = this.getPointPosition(eventData);
             this._windowAdapter.postPointerEvent(new PointerData(
@@ -345,9 +299,7 @@ namespace Unity.UIWidgets.engine {
                 physicalY: position.y
             ));
         }
-#endif
 
-#if !UNITY_2019_2_OR_NEWER
         public Vector2 getPointPosition(PointerEventData eventData) {
             Vector2 localPoint;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(this.rectTransform, eventData.position,
@@ -357,10 +309,8 @@ namespace Unity.UIWidgets.engine {
             localPoint.y = (this.rectTransform.rect.max.y - localPoint.y) * scaleFactor;
             return localPoint;
         }
-#endif
 
         public Vector2 getPointPosition(Vector2 position) {
-#if !UNITY_2019_2_OR_NEWER
             Vector2 localPoint;
             Camera eventCamera = null;
 
@@ -375,12 +325,8 @@ namespace Unity.UIWidgets.engine {
             localPoint.x = (localPoint.x - this.rectTransform.rect.min.x) * scaleFactor;
             localPoint.y = (this.rectTransform.rect.max.y - localPoint.y) * scaleFactor;
             return localPoint;
-#else
-            return Vector2.zero;
-#endif
         }
 
-#if !UNITY_2019_2_OR_NEWER
         public void OnDrag(PointerEventData eventData) {
             var position = this.getPointPosition(eventData);
             this._windowAdapter.postPointerEvent(new PointerData(
@@ -392,9 +338,7 @@ namespace Unity.UIWidgets.engine {
                 physicalY: position.y
             ));
         }
-#endif
 
-#if !UNITY_2019_2_OR_NEWER
         public void OnPointerEnter(PointerEventData eventData) {
             var pointerKey = InputUtils.getPointerDeviceKey(eventData);
             this._enteredPointers.Add(pointerKey);
@@ -410,9 +354,7 @@ namespace Unity.UIWidgets.engine {
                 physicalY: position.y
             ));
         }
-#endif
 
-#if !UNITY_2019_2_OR_NEWER
         public void OnPointerExit(PointerEventData eventData) {
             var pointerKey = InputUtils.getPointerDeviceKey(eventData);
             this._enteredPointers.Remove(pointerKey);
@@ -427,7 +369,6 @@ namespace Unity.UIWidgets.engine {
                 physicalY: position.y
             ));
         }
-#endif
 
         public Window window {
             get { return this._windowAdapter; }

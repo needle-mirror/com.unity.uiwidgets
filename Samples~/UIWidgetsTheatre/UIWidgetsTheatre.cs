@@ -7,9 +7,7 @@ using Unity.UIWidgets.widgets;
 
 #if UNITY_EDITOR
 using UnityEditor;
-#if !UNITY_2019_2_OR_NEWER
 using UnityEditor.UI;
-#endif
 #endif
 
 using UnityEngine;
@@ -58,7 +56,6 @@ namespace UIWidgetsTheatre {
     }
     
     
-    #if !UNITY_2019_2_OR_NEWER
     #if UNITY_EDITOR
     [CustomEditor(typeof(UIWidgetsTheatre), true)]
     [CanEditMultipleObjects]
@@ -72,6 +69,5 @@ namespace UIWidgetsTheatre {
             EditorUtility.SetDirty(this.target);
         }
     }
-    #endif
     #endif
 }

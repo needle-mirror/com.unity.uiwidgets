@@ -16,7 +16,7 @@ namespace UIWidgets.Tests {
 
         Widget image;
 
-        [MenuItem("Window/UIWidgets/Tests/EditableTextWidget")]
+        [MenuItem("UIWidgetsTests/EditableTextWidget")]
         public static void renderWidgets() {
             GetWindow(typeof(EditableTextWiget));
         }

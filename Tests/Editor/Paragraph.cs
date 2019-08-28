@@ -68,7 +68,7 @@ namespace UIWidgets.Tests {
             return null;
         }
 
-        RenderBox box(RenderParagraph p, int width = 200, int height = 200) {
+        RenderBox box(RenderParagraph p, int width = 200, int height = 600) {
             return new RenderConstrainedOverflowBox(
                     minWidth: width,
                     maxWidth: width,
@@ -76,8 +76,7 @@ namespace UIWidgets.Tests {
                     maxHeight: height,
                     alignment: Alignment.center,
                     child: p
-                )
-                ;
+                );
         }
 
         RenderBox flexItemBox(RenderParagraph p, int width = 200, int height = 150) {
@@ -116,7 +115,23 @@ namespace UIWidgets.Tests {
                             text:
                             "This is FontStyle.italic And 发撒放豆腐sad 发生的 Bold Text This is FontStyle.italic  And Bold  Text\n\n"),
                         new TextSpan(style: new TextStyle(fontSize: 18),
-                            text: "FontSize 18: Get a named matrix value from the shader."),
+                            text: "FontSize 18: Get a named matrix value from the shader.\n\n"),
+                        new TextSpan(style: new TextStyle(fontSize: 24),
+                            text: "Emoji \ud83d\ude0a\ud83d\ude0b\ud83d\ude0d\ud83d\ude0e\ud83d\ude00"),
+                        new TextSpan(style: new TextStyle(fontSize: 14),
+                            text: "Emoji \ud83d\ude0a\ud83d\ude0b\ud83d\ude0d\ud83d\ude0e\ud83d\ude00 Emoji"),
+                        new TextSpan(style: new TextStyle(fontSize: 18),
+                            text: "Emoji \ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05"),
+                        new TextSpan(style: new TextStyle(fontSize: 18),
+                            text: "\ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05"),
+                        new TextSpan(style: new TextStyle(fontSize: 18),
+                            text: "\ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05"),
+                        new TextSpan(style: new TextStyle(fontSize: 18),
+                            text: "\ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05"),
+                        new TextSpan(style: new TextStyle(fontSize: 18),
+                            text: "\ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05"),
+                        new TextSpan(style: new TextStyle(fontSize: 24),
+                            text: "Emoji \ud83d\ude06\ud83d\ude1C\ud83d\ude18\ud83d\ude2D\ud83d\ude0C\ud83d\ude1E\n\n"),
                         new TextSpan(style: new TextStyle(fontSize: 14),
                             text: "FontSize 14"),
                     })));

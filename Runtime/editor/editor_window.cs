@@ -71,7 +71,7 @@ namespace Unity.UIWidgets.editor {
     public class EditorWindowAdapter : WindowAdapter {
         public readonly EditorWindow editorWindow;
 
-        public EditorWindowAdapter(EditorWindow editorWindow) {
+        public EditorWindowAdapter(EditorWindow editorWindow) : base(true) {
             this.editorWindow = editorWindow;
         }
 
@@ -90,10 +90,6 @@ namespace Unity.UIWidgets.editor {
 
         protected override float queryDevicePixelRatio() {
             return EditorGUIUtility.pixelsPerPoint;
-        }
-
-        protected override int queryAntiAliasing() {
-            return defaultAntiAliasing;
         }
 
         protected override Vector2 queryWindowSize() {
@@ -125,6 +121,10 @@ namespace Unity.UIWidgets.editor {
 
     public abstract class WindowAdapter : Window {
         static readonly List<WindowAdapter> _windowAdapters = new List<WindowAdapter>();
+
+        public WindowAdapter(bool inEditorWindow = false) {
+            this.inEditorWindow = inEditorWindow;
+        }
 
         public static List<WindowAdapter> windowAdapters {
             get { return _windowAdapters; }
@@ -164,6 +164,14 @@ namespace Unity.UIWidgets.editor {
         protected float deltaTime;
         protected float unscaledDeltaTime;
 
+        void updatePhysicalSize() {
+            var size = this.queryWindowSize();
+            this._physicalSize = new Size(
+                size.x * this._devicePixelRatio,
+                size.y * this._devicePixelRatio);
+        }
+
+
         protected virtual void updateDeltaTime() {
             this.deltaTime = Time.unscaledDeltaTime;
             this.unscaledDeltaTime = Time.deltaTime;
@@ -180,15 +188,7 @@ namespace Unity.UIWidgets.editor {
 
         public void OnEnable() {
             this._devicePixelRatio = this.queryDevicePixelRatio();
-            this._antiAliasing = this.queryAntiAliasing();
-
-            var size = this.queryWindowSize();
-            this._lastWindowWidth = size.x;
-            this._lastWindowHeight = size.y;
-            this._physicalSize = new Size(
-                this._lastWindowWidth * this._devicePixelRatio,
-                this._lastWindowHeight * this._devicePixelRatio);
-
+            this.updatePhysicalSize();
             this.updateSafeArea();
             D.assert(this._surface == null);
             this._surface = this.createSurface();
@@ -213,12 +213,14 @@ namespace Unity.UIWidgets.editor {
             this._surface = null;
         }
 
+        readonly protected bool inEditorWindow;
+
         public override IDisposable getScope() {
             WindowAdapter oldInstance = (WindowAdapter) _instance;
             _instance = this;
 
             if (this._binding == null) {
-                this._binding = new WidgetsBinding();
+                this._binding = new WidgetsBinding(this.inEditorWindow);
             }
 
             SchedulerBinding._instance = this._binding;
@@ -269,10 +271,6 @@ namespace Unity.UIWidgets.editor {
                 return true;
             }
 
-            if (this._antiAliasing != this.queryAntiAliasing()) {
-                return true;
-            }
-
             var size = this.queryWindowSize();
             if (this._lastWindowWidth != size.x
                 || this._lastWindowHeight != size.y) {
@@ -291,7 +289,6 @@ namespace Unity.UIWidgets.editor {
             using (this.getScope()) {
                 if (this.displayMetricsChanged()) {
                     this._devicePixelRatio = this.queryDevicePixelRatio();
-                    this._antiAliasing = this.queryAntiAliasing();
 
                     var size = this.queryWindowSize();
                     this._lastWindowWidth = size.x;
@@ -316,7 +313,6 @@ namespace Unity.UIWidgets.editor {
         }
 
         protected abstract float queryDevicePixelRatio();
-        protected abstract int queryAntiAliasing();
         protected abstract Vector2 queryWindowSize();
 
         protected virtual Surface createSurface() {
@@ -399,6 +395,26 @@ namespace Unity.UIWidgets.editor {
                         evt.button
                     );
                 }
+                else if (evt.type == EventType.DragUpdated) {
+                    pointerData = new PointerData(
+                        timeStamp: Timer.timespanSinceStartup,
+                        change: PointerChange.dragFromEditorMove,
+                        kind: PointerDeviceKind.mouse,
+                        device: evt.button,
+                        physicalX: evt.mousePosition.x * this._devicePixelRatio,
+                        physicalY: evt.mousePosition.y * this._devicePixelRatio
+                    );
+                }
+                else if (evt.type == EventType.DragPerform) {
+                    pointerData = new PointerData(
+                        timeStamp: Timer.timespanSinceStartup,
+                        change: PointerChange.dragFromEditorRelease,
+                        kind: PointerDeviceKind.mouse,
+                        device: evt.button,
+                        physicalX: evt.mousePosition.x * this._devicePixelRatio,
+                        physicalY: evt.mousePosition.y * this._devicePixelRatio
+                    );
+                }
 
                 if (pointerData != null) {
                     this.onPointerEvent(new PointerDataPacket(new List<PointerData> {
@@ -444,6 +460,10 @@ namespace Unity.UIWidgets.editor {
         }
 
         public void Update() {
+            if (this._physicalSize == null || this._physicalSize.isEmpty) {
+                this.updatePhysicalSize();
+            }
+
             this.updateDeltaTime();
             this.updateFPS(this.unscaledDeltaTime);
 
@@ -458,10 +478,10 @@ namespace Unity.UIWidgets.editor {
                 this.flushMicrotasks();
             }
         }
-        
+
         static readonly TimeSpan _coolDownDelay = new TimeSpan(0, 0, 0, 0, 200);
         static Timer frameCoolDownTimer;
-        
+
         public override void scheduleFrame(bool regenerateLayerTree = true) {
             if (regenerateLayerTree) {
                 this._regenerateLayerTree = true;
@@ -489,7 +509,6 @@ namespace Unity.UIWidgets.editor {
 
             layerTree.frameSize = this._physicalSize;
             layerTree.devicePixelRatio = this._devicePixelRatio;
-            layerTree.antiAliasing = this._antiAliasing;
             this._rasterizer.draw(layerTree);
         }
 
