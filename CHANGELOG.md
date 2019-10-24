@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.5.4-preview.1] - 2019-8-28
+## [1.5.4-preview.2] - 2019-10-24
+
+Fix issues:
+
+* Raster cache assertion error
+
+## [1.5.4-preview.1] - 2019-10-21
 
 Fix issues:
 
