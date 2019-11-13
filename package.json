@@ -1,14 +1,14 @@
 {
   "name": "com.unity.uiwidgets",
   "displayName": "UIWidgets",
-  "version": "1.5.4-preview.3",
+  "version": "1.5.4-preview.4",
   "unity": "2018.4",
   "description": "UIWidgets allows you to build beautiful cross-platform apps through Unity",
   "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git@github.cds.internal.unity3d.com:unity/com.unity.uiwidgets.git",
-    "revision": "6acb69fe21bc868a3c3cb53e91610190b0d8378c"
+    "revision": "f65fe2242779d687fc1bd2bc79d7a7d23a29580c"
   },
   "samples": [
     {

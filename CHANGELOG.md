@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.4-preview.4] - 2019-11-13
+
+Add features:
+
+* Allow modifying response to keyboard enter event.
+* Adopt iOS 13.2 emoji.
+
 ## [1.5.4-preview.3] - 2019-11-8
 
 Add features:
