@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.4-preview.5] - 2019-11-15
+
+Fix issues:
+
+* Drag and scroll gesture conflict.
+
 ## [1.5.4-preview.4] - 2019-11-13
 
 Add features:
