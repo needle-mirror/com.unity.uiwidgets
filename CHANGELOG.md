@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.4-preview.6] - 2019-11-19
+
+Fix issues:
+
+* Restructure Sample folder.
+* Fix iOS bug.
+
 ## [1.5.4-preview.5] - 2019-11-15
 
 Fix issues:
