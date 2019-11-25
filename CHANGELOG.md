@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.4-preview.7] - 2019-11-25
+
+* Remove Resources.
+* Remove Plugins (except shaders).
+
 ## [1.5.4-preview.6] - 2019-11-19
 
 Fix issues:
