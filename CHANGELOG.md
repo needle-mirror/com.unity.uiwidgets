@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.4-preview.9] - 2019-11-29
+
+Fix issue:
+
+* Picture state save and restore unmatch.
+
 ## [1.5.4-preview.8] - 2019-11-26
 
 * Automatic check and import resources.
