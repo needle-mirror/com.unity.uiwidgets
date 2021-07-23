@@ -1,14 +1,14 @@
 {
   "name": "com.unity.uiwidgets",
   "displayName": "UIWidgets",
-  "version": "1.5.4-preview.10",
+  "version": "1.5.4-preview.11",
   "unity": "2018.3",
   "description": "UIWidgets allows you to build beautiful cross-platform apps through Unity.\n\nThe UIWidgets installed from here has removed Resources and Plugins folder. You may be prompted to import the required resources. The resources are also available at https://github.com/UIWidgets/Resources.\n\nIf you need to build for Android, iOS or WebGL, you need to download the plugins manually from https://github.com/UIWidgets/Plugins.",
   "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git@github.cds.internal.unity3d.com:unity/com.unity.uiwidgets.git",
-    "revision": "b1726f7370ff24c82d6682d507823ede673a594e"
+    "revision": "332236b927c94d8bca27fe3fab138e96e1c636ca"
   },
   "samples": [
     {

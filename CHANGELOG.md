@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.4-preview.11] - 2020-1-2
+
+Fix issue:
+
+* Table deadloop, caused by float precision.
+
 ## [1.5.4-preview.10] - 2020-1-2
 
 Fix issue:
