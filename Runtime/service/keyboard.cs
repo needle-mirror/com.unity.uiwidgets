@@ -364,7 +364,7 @@ namespace Unity.UIWidgets.service {
         } 
     }
     
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL
     class UIWidgetsWebGLKeyboardDelegate : AbstractUIWidgetsKeyboardDelegate {
         
         public override void show() {
@@ -385,7 +385,7 @@ namespace Unity.UIWidgets.service {
         }
 
         public override void setClient(int client, TextInputConfiguration configuration) {
-            WebGLInput.captureAllKeyboardInput = false;
+            // WebGLInput.captureAllKeyboardInput = false;
             Input.imeCompositionMode = IMECompositionMode.On;
             UIWidgetsTextInputSetClient(client, configuration.toJson().ToString());
         }

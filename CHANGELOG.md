@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.4-preview.12] - 2020-1-6
+
+Fix issue:
+
+* Remove WebGLInput.
+
 ## [1.5.4-preview.11] - 2020-1-2
 
 Fix issue:

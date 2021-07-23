@@ -590,7 +590,7 @@ namespace Unity.UIWidgets.service {
                 else {
                     keyboardDelegate = new UIWidgetsTouchScreenKeyboardDelegate();
                 }
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#elif UNITY_WEBGL
                 keyboardDelegate = new UIWidgetsWebGLKeyboardDelegate();
 #else
                 keyboardDelegate = new DefaultKeyboardDelegate();
