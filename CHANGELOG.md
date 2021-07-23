@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.4-preview.10] - 2020-1-2
+
+Fix issue:
+
+* WebGLInput cannot compile in Editor
+
 ## [1.5.4-preview.9] - 2019-11-29
 
 Fix issue:
