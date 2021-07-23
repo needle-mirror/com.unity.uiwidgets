@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.4-preview.3] - 2019-11-8
+
+Add features:
+
+* New mouse event handling
+* OnDemandRendering for 2019.3 or newer.
+
 ## [1.5.4-preview.2] - 2019-10-24
 
 Fix issues:
